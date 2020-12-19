@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+    <changeSet author="eduard.romaniuk" id="create-movie-table">
+        <createTable tableName="movie">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="name" type="VARCHAR(100)">
+                <constraints nullable="false" primaryKey="false" unique="true"/>
+            </column>
+            <column name="description" type="VARCHAR(500)">
+                <constraints nullable="true" primaryKey="false" unique="false"/>
+            </column>
+            <column name="duration_minutes" type="INT">
+                <constraints nullable="false" primaryKey="false" unique="false"/>
+            </column>
+        </createTable>
+        <addAutoIncrement columnDataType="INT"
+                          columnName="id"
+                          defaultOnNull="false"
+                          generationType="ALWAYS"
+                          incrementBy="1"
+                          schemaName="public"
+                          startWith="1"
+                          tableName="movie"/>
+    </changeSet>
+</databaseChangeLog>
