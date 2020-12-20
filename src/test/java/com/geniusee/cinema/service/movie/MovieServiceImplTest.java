@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
-import org.springframework.context.annotation.ComponentScan;
+import org.springframework.test.context.ActiveProfiles;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.Optional;
@@ -22,10 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 
 @SpringBootTest
-@ComponentScan(basePackages = {
-        "com.geniusee.cinema.service.movie",
-        "com.t6ggeniusee.cinema.mapper.movie"
-})
+@ActiveProfiles("unit-test")
 class MovieServiceImplTest {
     @MockBean
     private MovieRepository movieRepository;
