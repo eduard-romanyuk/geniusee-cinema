@@ -144,6 +144,6 @@ class MovieServiceImplTest {
     }
 
     private static Specification<Movie> nameLike(String name) {
-        return (movie, cq, cb) -> cb.equal(movie.get("name"), name);
+        return (movie, cq, cb) -> cb.like(movie.get("name"), "%" + name + "%");
     }
 }
