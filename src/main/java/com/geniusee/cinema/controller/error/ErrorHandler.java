@@ -1,5 +1,6 @@
 package com.geniusee.cinema.controller.error;
 
+import org.springframework.data.mapping.PropertyReferenceException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
@@ -17,8 +18,9 @@ import java.util.Map;
 
 @RestControllerAdvice
 public class ErrorHandler {
-    private static final Map<String, String> emptyRequestBody =
-            Collections.singletonMap("message", "Request body is mandatory");
+    private static final String MESSAGE = "message";
+    private static final String EMPTY_REQUEST_BODY = "Request body is mandatory";
+    private static final String INVALID_SORT_FIELD = "Invalid sort fieldName";
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(EntityNotFoundException.class)
@@ -30,7 +32,7 @@ public class ErrorHandler {
     public Map<String, String> validationException(MethodArgumentNotValidException ex) {
         Map<String, String> result = new HashMap<>();
         List<ObjectError> allErrors = ex.getBindingResult().getAllErrors();
-        for(ObjectError error: allErrors) {
+        for (ObjectError error : allErrors) {
             String fieldName = ((FieldError) error).getField();
             String errorMessage = error.getDefaultMessage();
             result.put(fieldName, errorMessage);
@@ -41,6 +43,16 @@ public class ErrorHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public Map<String, String> emptyRequestBody() {
-        return emptyRequestBody;
+        return generateMessage(EMPTY_REQUEST_BODY);
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(PropertyReferenceException.class)
+    public Map<String, String> invalidSortParam() {
+        return generateMessage(INVALID_SORT_FIELD);
+    }
+
+    private Map<String, String> generateMessage(String message) {
+        return Collections.singletonMap(MESSAGE, message);
     }
 }

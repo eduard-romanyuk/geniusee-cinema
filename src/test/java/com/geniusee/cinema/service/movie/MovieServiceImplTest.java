@@ -12,9 +12,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.test.context.ActiveProfiles;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.Collections;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -103,6 +108,19 @@ class MovieServiceImplTest {
         Mockito.verify(movieRepository, Mockito.atLeastOnce()).deleteById(id);
     }
 
+    @Test
+    void findAll() {
+        Page<Movie> page = new PageImpl<>(Collections.singletonList(sampleMovie()));
+        Specification<Movie> specification = Specification.where(nameLike("girl"));
+        Pageable pageable = Pageable.unpaged();
+        Mockito.when(movieRepository.findAll(specification, pageable)).thenReturn(page);
+
+        movieService.findAll(specification, pageable);
+
+        Mockito.verify(movieRepository, Mockito.atLeastOnce()).findAll(specification, pageable);
+        Mockito.verify(movieIdentityMapper, Mockito.atLeastOnce()).toDto(anyMovie());
+    }
+
     private Movie anyMovie() {
         return any(Movie.class);
     }
@@ -123,5 +141,9 @@ class MovieServiceImplTest {
     private void assertSaveAndMapDto(Movie movie) {
         Mockito.verify(movieRepository, Mockito.atLeastOnce()).save(movie);
         Mockito.verify(movieIdentityMapper, Mockito.atLeastOnce()).toDto(movie);
+    }
+
+    private static Specification<Movie> nameLike(String name) {
+        return (movie, cq, cb) -> cb.equal(movie.get("name"), name);
     }
 }

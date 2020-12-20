@@ -10,6 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.mapping.PropertyReferenceException;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
@@ -17,6 +20,7 @@ import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.Collections;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -34,9 +38,6 @@ class MovieControllerTest {
     private MovieService movieService;
     @Autowired
     private MockMvc mockMvc;
-
-    private static final String emptyBodyErrorMessage = "Request body is mandatory";
-    private static final String emptyNameErrorMessage = "Name is mandatory";
 
     @Test
     void findById_NotFound() throws Exception {
@@ -96,6 +97,31 @@ class MovieControllerTest {
                 .andExpect(status().isOk());
     }
 
+    @Test
+    void findAll_Ok() throws Exception {
+        MovieIdentityDto dto = sampleDto();
+        Page<MovieIdentityDto> samplePage = new PageImpl<>(Collections.singletonList(dto));
+        Mockito.when(movieService.findAll(any(), any())).thenReturn(samplePage);
+
+        mockMvc.perform(get("/movies"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.content[0].name").value(dto.getName()))
+                .andExpect(jsonPath("$.totalPages").value(1))
+                .andExpect(jsonPath("$.totalElements").value(1));
+    }
+
+    @Test
+    void findAll_InvalidSort() throws Exception {
+        Mockito.when(movieService.findAll(any(), any()))
+                .thenThrow(PropertyReferenceException.class);
+
+        mockMvc.perform(get("/movies"))
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("Invalid sort fieldName"));
+    }
+
     private MovieIdentityDto sampleDto() {
         MovieIdentityDto dto = new MovieIdentityDto();
         dto.setId(1);
@@ -114,7 +140,7 @@ class MovieControllerTest {
         mockMvc.perform(request)
                 .andDo(print())
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.message").value(emptyBodyErrorMessage));
+                .andExpect(jsonPath("$.message").value("Request body is mandatory"));
     }
 
     private void checkBadRequestValidationException(MockHttpServletRequestBuilder request) throws Exception {
@@ -124,7 +150,7 @@ class MovieControllerTest {
         mockMvc.perform(jsonBody(request, dto))
                 .andDo(print())
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.name").value(emptyNameErrorMessage));
+                .andExpect(jsonPath("$.name").value("Name is mandatory"));
     }
 
     private void checkOk(MockHttpServletRequestBuilder request, MovieIdentityDto mockMethodCall) throws Exception {

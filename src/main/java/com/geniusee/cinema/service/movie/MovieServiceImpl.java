@@ -7,6 +7,9 @@ import com.geniusee.cinema.mapper.movie.MovieIdentityMapper;
 import com.geniusee.cinema.mapper.movie.MovieMapper;
 import com.geniusee.cinema.repository.MovieRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
@@ -43,5 +46,11 @@ public class MovieServiceImpl implements MovieService {
     @Override
     public void delete(long id) {
         movieRepository.deleteById(id);
+    }
+
+    @Override
+    public Page<MovieIdentityDto> findAll(Specification<Movie> specification, Pageable pageable) {
+        Page<Movie> movies = movieRepository.findAll(specification, pageable);
+        return movies.map(movieIdentityMapper::toDto);
     }
 }

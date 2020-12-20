@@ -3,7 +3,10 @@ package com.geniusee.cinema.controller.movie;
 import com.geniusee.cinema.dto.MovieDto;
 import com.geniusee.cinema.dto.MovieIdentityDto;
 import com.geniusee.cinema.service.movie.MovieService;
+import com.geniusee.cinema.specification.MovieSpecification;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -32,5 +35,10 @@ public class MovieController {
     @DeleteMapping("/{id}")
     public void delete(@PathVariable long id) {
         movieService.delete(id);
+    }
+
+    @GetMapping
+    public Page<MovieIdentityDto> findAll(MovieSpecification specification, Pageable pageable) {
+        return movieService.findAll(specification, pageable);
     }
 }
