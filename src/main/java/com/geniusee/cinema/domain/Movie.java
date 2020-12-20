@@ -33,4 +33,8 @@ public class Movie {
         this.description = description;
         this.durationMinutes = durationMinutes;
     }
+
+    public Movie(long id) {
+        this.id = id;
+    }
 }

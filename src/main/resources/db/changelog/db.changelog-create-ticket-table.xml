@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+    <changeSet author="eduard.romaniuk" id="create-movie-ticket-table">
+        <createTable tableName="ticket">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="movie_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="false" unique="false"/>
+            </column>
+            <column name="hall" type="INT">
+                <constraints nullable="false" primaryKey="false" unique="false"/>
+            </column>
+            <column name="place" type="INT">
+                <constraints nullable="false" primaryKey="false" unique="false"/>
+            </column>
+            <column name="price" type="INT">
+                <constraints nullable="false" primaryKey="false" unique="false"/>
+            </column>
+        </createTable>
+        <addAutoIncrement columnDataType="INT"
+                          columnName="id"
+                          defaultOnNull="false"
+                          generationType="ALWAYS"
+                          incrementBy="1"
+                          schemaName="public"
+                          startWith="1"
+                          tableName="ticket"/>
+        <addForeignKeyConstraint baseColumnNames="movie_id"
+                                 baseTableName="ticket"
+                                 constraintName="fk_ticket_movie_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="movie"/>
+    </changeSet>
+</databaseChangeLog>
