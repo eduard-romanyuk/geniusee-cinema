@@ -1,7 +1,7 @@
 package com.geniusee.cinema.controller.movie;
 
-import com.geniusee.cinema.dto.MovieDto;
-import com.geniusee.cinema.dto.MovieIdentityDto;
+import com.geniusee.cinema.dto.movie.MovieDto;
+import com.geniusee.cinema.dto.movie.MovieIdentityDto;
 import com.geniusee.cinema.service.movie.MovieService;
 import org.json.JSONObject;
 import org.junit.jupiter.api.Test;

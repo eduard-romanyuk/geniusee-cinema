@@ -1,4 +1,4 @@
-package com.geniusee.cinema.dto;
+package com.geniusee.cinema.dto.movie;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

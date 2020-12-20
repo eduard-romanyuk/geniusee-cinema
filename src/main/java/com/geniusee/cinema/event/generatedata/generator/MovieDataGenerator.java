@@ -1,8 +1,8 @@
 package com.geniusee.cinema.event.generatedata.generator;
 
-import com.geniusee.cinema.domain.Movie;
+import com.geniusee.cinema.domain.movie.Movie;
 import com.geniusee.cinema.event.generatedata.DataGenerator;
-import com.geniusee.cinema.repository.MovieRepository;
+import com.geniusee.cinema.repository.movie.MovieRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.annotation.Order;

@@ -1,4 +1,4 @@
-package com.geniusee.cinema.domain;
+package com.geniusee.cinema.domain.movie;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;

@@ -1,6 +1,6 @@
-package com.geniusee.cinema.specification;
+package com.geniusee.cinema.specification.movie;
 
-import com.geniusee.cinema.domain.Movie;
+import com.geniusee.cinema.domain.movie.Movie;
 import net.kaczmarzyk.spring.data.jpa.domain.GreaterThanOrEqual;
 import net.kaczmarzyk.spring.data.jpa.domain.LessThanOrEqual;
 import net.kaczmarzyk.spring.data.jpa.domain.LikeIgnoreCase;

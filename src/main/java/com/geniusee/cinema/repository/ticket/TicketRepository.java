@@ -1,6 +1,6 @@
-package com.geniusee.cinema.repository;
+package com.geniusee.cinema.repository.ticket;
 
-import com.geniusee.cinema.domain.Ticket;
+import com.geniusee.cinema.domain.ticket.Ticket;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;

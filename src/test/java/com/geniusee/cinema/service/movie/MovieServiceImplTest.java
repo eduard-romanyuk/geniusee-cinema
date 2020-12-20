@@ -1,11 +1,11 @@
 package com.geniusee.cinema.service.movie;
 
-import com.geniusee.cinema.domain.Movie;
-import com.geniusee.cinema.dto.MovieDto;
-import com.geniusee.cinema.dto.MovieIdentityDto;
+import com.geniusee.cinema.domain.movie.Movie;
+import com.geniusee.cinema.dto.movie.MovieDto;
+import com.geniusee.cinema.dto.movie.MovieIdentityDto;
 import com.geniusee.cinema.mapper.movie.MovieIdentityMapper;
 import com.geniusee.cinema.mapper.movie.MovieMapper;
-import com.geniusee.cinema.repository.MovieRepository;
+import com.geniusee.cinema.repository.movie.MovieRepository;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;

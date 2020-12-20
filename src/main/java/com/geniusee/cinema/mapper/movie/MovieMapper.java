@@ -1,7 +1,7 @@
 package com.geniusee.cinema.mapper.movie;
 
-import com.geniusee.cinema.domain.Movie;
-import com.geniusee.cinema.dto.MovieDto;
+import com.geniusee.cinema.domain.movie.Movie;
+import com.geniusee.cinema.dto.movie.MovieDto;
 import com.geniusee.cinema.mapper.BaseMapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;

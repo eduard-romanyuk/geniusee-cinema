@@ -1,6 +1,6 @@
-package com.geniusee.cinema.repository;
+package com.geniusee.cinema.repository.movie;
 
-import com.geniusee.cinema.domain.Movie;
+import com.geniusee.cinema.domain.movie.Movie;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;

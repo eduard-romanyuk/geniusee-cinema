@@ -1,5 +1,6 @@
-package com.geniusee.cinema.domain;
+package com.geniusee.cinema.domain.ticket;
 
+import com.geniusee.cinema.domain.movie.Movie;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
