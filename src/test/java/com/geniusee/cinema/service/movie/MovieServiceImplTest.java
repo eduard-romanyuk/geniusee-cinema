@@ -44,7 +44,7 @@ class MovieServiceImplTest {
         long id = 1;
         assertThrows(EntityNotFoundException.class, () -> movieService.findById(id));
         Mockito.verify(movieRepository, Mockito.atLeastOnce()).findById(id);
-        Mockito.verify(movieMapper, Mockito.never()).toDto(anyMovie());
+        Mockito.verify(movieIdentityMapper, Mockito.never()).toDto(anyMovie());
     }
 
     @Test
