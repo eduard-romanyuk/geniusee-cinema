@@ -3,7 +3,6 @@ package com.geniusee.cinema.service.movie;
 import com.geniusee.cinema.domain.Movie;
 import com.geniusee.cinema.dto.MovieDto;
 import com.geniusee.cinema.dto.MovieIdentityDto;
-import com.geniusee.cinema.exception.ResourceNotFoundException;
 import com.geniusee.cinema.mapper.movie.MovieIdentityMapper;
 import com.geniusee.cinema.mapper.movie.MovieMapper;
 import com.geniusee.cinema.repository.MovieRepository;
@@ -15,6 +14,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.context.annotation.ComponentScan;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -24,7 +24,7 @@ import static org.mockito.ArgumentMatchers.any;
 @SpringBootTest
 @ComponentScan(basePackages = {
         "com.geniusee.cinema.service.movie",
-        "com.geniusee.cinema.mapper.movie"
+        "com.t6ggeniusee.cinema.mapper.movie"
 })
 class MovieServiceImplTest {
     @MockBean
@@ -40,7 +40,7 @@ class MovieServiceImplTest {
     @Test
     void findById_EntityNotFound() {
         long id = 1;
-        assertThrows(ResourceNotFoundException.class, () -> movieService.findById(id));
+        assertThrows(EntityNotFoundException.class, () -> movieService.findById(id));
         Mockito.verify(movieRepository, Mockito.atLeastOnce()).findById(id);
         Mockito.verify(movieMapper, Mockito.never()).toDto(anyMovie());
     }
@@ -74,9 +74,10 @@ class MovieServiceImplTest {
     @Test
     void update_EntityNotFound() {
         long id = 1;
+        Mockito.when(movieRepository.getOne(id)).thenThrow(EntityNotFoundException.class);
 
-        assertThrows(ResourceNotFoundException.class, () -> movieService.update(createMovieDto(), id));
-        Mockito.verify(movieRepository, Mockito.atLeastOnce()).findById(id);
+        assertThrows(EntityNotFoundException.class, () -> movieService.update(createMovieDto(), id));
+        Mockito.verify(movieRepository, Mockito.atLeastOnce()).getOne(id);
         Mockito.verify(movieMapper, Mockito.never()).updateEntityFromDto(any(MovieDto.class), anyMovie());
         Mockito.verify(movieRepository, Mockito.never()).save(anyMovie());
         Mockito.verify(movieIdentityMapper, Mockito.never()).toDto(anyMovie());
@@ -85,12 +86,13 @@ class MovieServiceImplTest {
     @Test
     void update_EntityExists() {
         Movie movie = sampleMovie();
-        Mockito.when(movieRepository.findById(movie.getId())).thenReturn(Optional.of(movie));
+        Mockito.when(movieRepository.getOne(movie.getId())).thenReturn(movie);
         Mockito.when(movieRepository.save(movie)).thenReturn(movie);
 
         MovieDto movieDto = createMovieDto();
         movieService.update(movieDto, movie.getId());
 
+        Mockito.verify(movieRepository, Mockito.atLeastOnce()).getOne(movie.getId());
         Mockito.verify(movieMapper, Mockito.atLeastOnce()).updateEntityFromDto(movieDto, movie);
         assertSaveAndMapDto(movie);
     }
