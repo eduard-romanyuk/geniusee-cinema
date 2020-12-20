@@ -1,5 +1,6 @@
 package com.geniusee.cinema.controller.error;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.mapping.PropertyReferenceException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import javax.persistence.EntityNotFoundException;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -50,6 +52,12 @@ public class ErrorHandler {
     @ExceptionHandler(PropertyReferenceException.class)
     public Map<String, String> invalidSortParam() {
         return generateMessage(INVALID_SORT_FIELD);
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public Map<String, String> processConstraintError(DataIntegrityViolationException ex) {
+        return generateMessage(ex.getMessage());
     }
 
     private Map<String, String> generateMessage(String message) {
